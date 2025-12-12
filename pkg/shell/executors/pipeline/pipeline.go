@@ -10,7 +10,8 @@ import (
 	"github.com/andreyxaxa/shell/pkg/shell/parser"
 )
 
-func RunPipeline(line string) error {
+// Run splits string into commands by "|" and connects them into pipe
+func Run(line string) error {
 	// Разбиваем строку на команды по символу |
 	// ps | grep go -> ["ps ", " grep go"]
 	commands := strings.Split(line, "|")
@@ -88,7 +89,6 @@ func RunPipeline(line string) error {
 		if err := cmd.Wait(); err != nil {
 			if exitError, ok := err.(*exec.ExitError); ok {
 				_ = exitError
-				// Не прерываем выполнение из-за ненулевого кода возврата
 			} else {
 				return fmt.Errorf("command wait failed: %w", err)
 			}

@@ -6,7 +6,8 @@ import (
 	"os/exec"
 )
 
-// runWithExitCode выполняет внешнюю команду и возвращает ошибку если код возврата != 0
+// RunWithExitCode runs external command and RETURNS ERROR if return code != 0.
+// Used in command chaining
 func RunWithExitCode(args []string, inputFile, outputFile string) error {
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stderr = os.Stderr
@@ -37,13 +38,13 @@ func RunWithExitCode(args []string, inputFile, outputFile string) error {
 	return cmd.Run()
 }
 
-// Используем в самой оболочке - main, поэтому просто показываем ошибку, не возвращая ее, чтобы не завершать main.
+// Run runs external command and DISPLAYS ERROR without returning it.
+// Because we use Run directly in shell, just displays error to avoid shell terminating
 func Run(args []string) {
 	if len(args) == 0 {
 		return
 	}
 
-	// TODO: отладочная инфа, потом удалить
 	fmt.Println("run", args)
 
 	cmd := exec.Command(args[0], args[1:]...)
@@ -52,7 +53,6 @@ func Run(args []string) {
 	cmd.Stdout = os.Stdout
 
 	if err := cmd.Run(); err != nil {
-		// TODO: подумать над участком кода
 		if exitError, ok := err.(*exec.ExitError); ok {
 			_ = exitError
 		} else {

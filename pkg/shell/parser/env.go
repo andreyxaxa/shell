@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Смотрим, есть ли переменные окружения
+// ParseEnv parses arguments from ParseArgs and gets env variables if they exists.
 func ParseEnv(args []string) []string {
 	var enved []string
 

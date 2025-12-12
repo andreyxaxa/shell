@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// ParseArgs parses arguments and returns a slice of arguments
+// "echo hello" -> ["echo", "hello"]
 func ParseArgs(line string) ([]string, error) {
 	var args []string
 	var s strings.Builder

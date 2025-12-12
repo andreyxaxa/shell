@@ -19,6 +19,7 @@ import (
 	"github.com/andreyxaxa/shell/pkg/shell/parser"
 )
 
+// Start runs shell
 func Start() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT)
@@ -47,7 +48,7 @@ func Start() {
 			continue
 		}
 
-		// Проверяем, есть ли оператор &&
+		// Проверяем, есть ли оператор ||
 		if strings.Contains(line, "||") {
 			if err := chaining.RunCondOr(line); err != nil {
 				fmt.Fprintln(os.Stderr, "conditional execution error:", err)
@@ -65,12 +66,13 @@ func Start() {
 
 		// Проверяем, есть ли пайплайны
 		if strings.Contains(line, "|") {
-			if err := pipeline.RunPipeline(line); err != nil {
+			if err := pipeline.Run(line); err != nil {
 				fmt.Fprintln(os.Stderr, "pipeline error:", err)
 			}
 			continue
 		}
 
+		// Парсим аргументы
 		args, err := parser.ParseArgs(line)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "error while parsing args:", err)
@@ -81,9 +83,10 @@ func Start() {
 			continue
 		}
 
+		// Проверяем, есть ли переменные окружения
 		args = parser.ParseEnv(args)
 
-		// редирект ?
+		// Редирект ?
 		inputStr, outputStr := "", ""
 		redirect := slices.Contains(args, ">") || slices.Contains(args, "<")
 

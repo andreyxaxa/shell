@@ -2,7 +2,8 @@ package parser
 
 import "errors"
 
-// ["echo", "123", ">", "out.txt"]
+// ParseRedirects parser args and returns input and output file NAMES.
+// ["echo", "123", ">", "out.txt"] ->
 // ["echo", "123"], inputFile, outputFile, nil
 func ParseRedirects(args []string) ([]string, string, string, error) {
 	var resArgs []string

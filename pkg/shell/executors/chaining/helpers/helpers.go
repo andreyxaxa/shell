@@ -13,7 +13,7 @@ import (
 	"github.com/andreyxaxa/shell/pkg/shell/parser"
 )
 
-// Из строки делаем слайс аргументов
+// TakeArgsFromCmd takes string of commands and returns a slice of commands, input and output files.
 // " cd 22" -> "cd 22" -> ["cd", "22"]
 func TakeArgsFromCmd(idx int, line string) ([]string, string, string, error) {
 	line = strings.TrimSpace(line)
@@ -22,7 +22,7 @@ func TakeArgsFromCmd(idx int, line string) ([]string, string, string, error) {
 	}
 
 	if strings.Contains(line, "|") {
-		if err := pipeline.RunPipeline(line); err != nil {
+		if err := pipeline.Run(line); err != nil {
 			return nil, "", "", fmt.Errorf("pipeline failed in conditional execution: %w", err)
 		}
 		return nil, "", "", nil
@@ -50,8 +50,8 @@ func TakeArgsFromCmd(idx int, line string) ([]string, string, string, error) {
 	return args, inputFile, outputFile, err
 }
 
-// Проверяем, что за команда.
-// Если это команда "наша" - вызываем нашу функцию, если команда внешняя - вызываем через exec.Command.Run()
+// CheckCmd checks whether a command is builtin or external.
+// If this is builtin -> we call it, else we call it via exec.Command.Run()
 func CheckCmd(args []string, inputFile, outputFile string) error {
 	var lastErr error
 

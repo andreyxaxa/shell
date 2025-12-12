@@ -8,7 +8,7 @@ import (
 	"github.com/andreyxaxa/shell/pkg/shell/executors/chaining/helpers"
 )
 
-// Для ||
+// RunCondOr runs external commands and builtins in chain with ||
 func RunCondOr(line string) error {
 	commands := strings.Split(line, "||")
 	if len(commands) == 0 {
@@ -34,7 +34,7 @@ func RunCondOr(line string) error {
 	return nil
 }
 
-// Для &&
+// RunCondAnd runs external commands and builtins in chain with &&
 func RunCondAnd(line string) error {
 	commands := strings.Split(line, "&&")
 	if len(commands) == 0 {

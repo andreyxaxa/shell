@@ -6,6 +6,7 @@ import (
 	"os/exec"
 )
 
+// RunWithRedirects runs external command with redirects
 func RunWithRedirects(args []string, inputFile, outputFile string) error {
 	cmd := exec.Command(args[0], args[1:]...)
 

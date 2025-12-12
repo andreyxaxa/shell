@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// Echo prints text into os.Stdout or into file if it exists
 func Echo(args []string, outputFile string) {
 	if len(args) <= 1 {
 		fmt.Println()
@@ -33,7 +34,7 @@ func Echo(args []string, outputFile string) {
 	}
 }
 
-// pwd
+// Pwd prints absolute path of current directory.
 func Pwd(outputFile string) error {
 	dir, err := os.Getwd()
 	if err != nil {
@@ -54,6 +55,7 @@ func Pwd(outputFile string) error {
 	return nil
 }
 
+// Cd changes the current working directory to the named directory
 func Cd(args []string) error {
 	dir := ""
 
@@ -70,6 +72,7 @@ func Cd(args []string) error {
 	return os.Chdir(dir)
 }
 
+// Ps shows running processes (ps -ef)
 func Ps(outputFile string) {
 	cmd := exec.Command("ps", "-ef")
 	cmd.Stdin = os.Stdin
@@ -92,6 +95,7 @@ func Ps(outputFile string) {
 	}
 }
 
+// Kill causes the process to exit immediately
 func Kill(args []string) {
 	if len(args) < 2 {
 		fmt.Fprintln(os.Stderr, "kill: missing pid")
