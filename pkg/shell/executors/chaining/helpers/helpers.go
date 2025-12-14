@@ -22,7 +22,7 @@ func TakeArgsFromCmd(idx int, line string) ([]string, string, string, error) {
 	}
 
 	if strings.Contains(line, "|") {
-		if err := pipeline.Run(line); err != nil {
+		if err := pipeline.Run(line, true); err != nil {
 			return nil, "", "", fmt.Errorf("pipeline failed in conditional execution: %w", err)
 		}
 		return nil, "", "", nil

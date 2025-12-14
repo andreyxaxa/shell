@@ -11,7 +11,7 @@ import (
 )
 
 // Run splits string into commands by "|" and connects them into pipe
-func Run(line string) error {
+func Run(line string, chain bool) error {
 	// Разбиваем строку на команды по символу |
 	// ps | grep go -> ["ps ", " grep go"]
 	commands := strings.Split(line, "|")
@@ -94,7 +94,11 @@ func Run(line string) error {
 	for _, cmd := range cmdList {
 		if err := cmd.Wait(); err != nil {
 			if exitError, ok := err.(*exec.ExitError); ok {
-				_ = exitError
+				if chain {
+					return fmt.Errorf("command exec error: %s", exitError.Error())
+				} else {
+					_ = exitError
+				}
 			} else {
 				return fmt.Errorf("command wait failed: %w", err)
 			}

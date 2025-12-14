@@ -66,7 +66,7 @@ func Start() {
 
 		// Проверяем, есть ли пайплайны
 		if strings.Contains(line, "|") {
-			if err := pipeline.Run(line); err != nil {
+			if err := pipeline.Run(line, false); err != nil {
 				fmt.Fprintln(os.Stderr, "pipeline error:", err)
 			}
 			continue
