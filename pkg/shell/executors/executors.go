@@ -45,8 +45,6 @@ func Run(args []string) {
 		return
 	}
 
-	fmt.Println("run", args)
-
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
