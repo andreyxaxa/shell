@@ -20,7 +20,8 @@ func Run(line string) error {
 	}
 
 	var cmdList []*exec.Cmd
-	var pipes []*os.File
+	var pipesW []*os.File
+	var pipesR []*os.File
 
 	for i, cmdStr := range commands {
 		// ["ps ", " grep go"] -> ["ps", "grep go"]
@@ -59,8 +60,9 @@ func Run(line string) error {
 		// Стандартный ввод следующей команды берем из пайпа
 		cmdList[i+1].Stdin = r
 
-		// Сохраняем writer-части для закрытия после запуска
-		pipes = append(pipes, w)
+		// Сохраняем части для закрытия после запуска
+		pipesW = append(pipesW, w)
+		pipesR = append(pipesR, r)
 	}
 
 	// Первая команда получает ввод из stdin, последняя - вывод в stdout
@@ -79,8 +81,12 @@ func Run(line string) error {
 		}
 	}
 
-	// Закрываем writer-части пайпов чтобы команды могли завершиться
-	for _, pipe := range pipes {
+	// Закрываем части пайпов чтобы команды могли завершиться
+	for _, pipe := range pipesW {
+		pipe.Close()
+	}
+
+	for _, pipe := range pipesR {
 		pipe.Close()
 	}
 
